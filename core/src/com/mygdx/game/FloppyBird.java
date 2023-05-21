@@ -22,7 +22,9 @@ public class FloppyBird extends ApplicationAdapter {
 
 		birdTexture = new Texture("bird.png");
 		birdSprite = new Sprite(birdTexture);
-		birdSprite.setPosition(10, 10);
+		birdSprite.setSize(56f, 45f);
+		birdSprite.setX(camera.viewportWidth / 2 - birdSprite.getWidth() / 2);
+		birdSprite.setY(camera.viewportHeight / 2 - birdSprite.getHeight() / 2);
 	}
 
 	@Override
@@ -31,7 +33,6 @@ public class FloppyBird extends ApplicationAdapter {
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		birdSprite.setSize(56f, 45f);
 		birdSprite.draw(batch);
 		batch.end();
 	}
