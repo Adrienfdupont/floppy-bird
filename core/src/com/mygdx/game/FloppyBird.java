@@ -15,8 +15,8 @@ public class FloppyBird extends ApplicationAdapter {
 	Texture birdTexture;
 	Sprite birdSprite;
 	final int gravity = 300;
-	int springTime;
-	final int springSpeed = 600;
+	final int springHeight = 500;
+	float springDuration;
 
 	@Override
 	public void create() {
@@ -43,15 +43,16 @@ public class FloppyBird extends ApplicationAdapter {
 
 		// user input
 		if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-			springTime = 15;
+			springDuration = 0.5f;
 		}
 
 		birdSprite.setY(birdSprite.getY() - gravity * Gdx.graphics.getDeltaTime());
 
 		// spring
-		if (springTime > 0) {
-			birdSprite.setY(birdSprite.getY() + springSpeed * Gdx.graphics.getDeltaTime());
-			springTime -= 0.1;
+		if (springDuration > 0) {
+			float spring = Gdx.graphics.getDeltaTime() * springHeight;
+			birdSprite.setY(birdSprite.getY() + spring);
+			springDuration -= Gdx.graphics.getDeltaTime();
 		}
 
 	}
