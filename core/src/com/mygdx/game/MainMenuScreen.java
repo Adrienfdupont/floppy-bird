@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -16,7 +17,7 @@ public class MainMenuScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-        text = "Touchez l'écran pour jouer !";
+        text = "Press the space bar to play !";
     }
 
     @Override
@@ -35,7 +36,7 @@ public class MainMenuScreen implements Screen {
         game.font.setColor(0, 0, 0, 1);
         game.batch.end();
 
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             game.setScreen(new GameScreen(game));
             dispose();
         }
