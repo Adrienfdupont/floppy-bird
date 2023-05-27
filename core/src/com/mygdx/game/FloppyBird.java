@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,7 +21,7 @@ public class FloppyBird extends ApplicationAdapter {
 	Texture pipeUpTexture;
 	Texture pipeDownTexture;
 	Array<Sprite> pipeSprites;
-	final int gravity = 300;
+	final int gravity = 250;
 	final int springHeight = 500;
 	float springDuration;
 	float pipeHeight;
@@ -81,12 +80,7 @@ public class FloppyBird extends ApplicationAdapter {
 
 		// user input
 		if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-			springDuration = 0.5f;
-		}
-
-		birdSprite.setY(birdSprite.getY() - gravity * Gdx.graphics.getDeltaTime());
-		for (Sprite pipe : pipeSprites) {
-			pipe.setX(pipe.getX() - 3);
+			springDuration = 0.2f;
 		}
 
 		// spring
@@ -95,6 +89,18 @@ public class FloppyBird extends ApplicationAdapter {
 			birdSprite.setY(birdSprite.getY() + spring);
 			springDuration -= Gdx.graphics.getDeltaTime();
 		}
+
+		birdSprite.setY(birdSprite.getY() - gravity * Gdx.graphics.getDeltaTime());
+		for (Sprite pipe : pipeSprites) {
+			pipe.setX(pipe.getX() - 3);
+		}
+
+		for (Sprite pipeSprite : pipeSprites) {
+			if (pipeSprite.getBoundingRectangle().overlaps(birdSprite.getBoundingRectangle())) {
+				System.out.println("test");
+			}
+		}
+
 	}
 
 	@Override
