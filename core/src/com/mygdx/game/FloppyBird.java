@@ -31,6 +31,7 @@ public class FloppyBird extends ApplicationAdapter {
 	Random random;
 	Timer timer;
 	TimerTask task;
+	boolean isPaused;
 
 	@Override
 	public void create() {
@@ -63,10 +64,15 @@ public class FloppyBird extends ApplicationAdapter {
 		};
 
 		timer.scheduleAtFixedRate(task, 0, 3000);
+
+		isPaused = false;
 	}
 
 	@Override
 	public void render() {
+		if (isPaused) {
+			return;
+		}
 		// drawing
 		ScreenUtils.clear(0.6f, 0.6f, 1, 1);
 		camera.update();
@@ -97,7 +103,7 @@ public class FloppyBird extends ApplicationAdapter {
 
 		for (Sprite pipeSprite : pipeSprites) {
 			if (pipeSprite.getBoundingRectangle().overlaps(birdSprite.getBoundingRectangle())) {
-				System.out.println("test");
+				isPaused = true;
 			}
 		}
 
@@ -107,6 +113,8 @@ public class FloppyBird extends ApplicationAdapter {
 	public void dispose() {
 		batch.dispose();
 		birdTexture.dispose();
+		pipeDownTexture.dispose();
+		pipeUpTexture.dispose();
 		timer.cancel();
 		task.cancel();
 	}
@@ -117,13 +125,13 @@ public class FloppyBird extends ApplicationAdapter {
 		Sprite topPipe = new Sprite(pipeUpTexture);
 		topPipe.setSize(pipeWidth, pipeHeight);
 		topPipe.setX(camera.viewportWidth);
-		topPipe.setY((float) Math.round(camera.viewportHeight * 1.6) - pipeHeight + offset);
+		topPipe.setY((float) Math.round(camera.viewportHeight * 1.65) - pipeHeight + offset);
 		pipeSprites.add(topPipe);
 
 		Sprite bottomPipe = new Sprite(pipeDownTexture);
 		bottomPipe.setSize(pipeWidth, pipeHeight);
 		bottomPipe.setX(camera.viewportWidth);
-		bottomPipe.setY(-(float) Math.round(camera.viewportHeight * 0.6) + offset);
+		bottomPipe.setY(-(float) Math.round(camera.viewportHeight * 0.65) + offset);
 		pipeSprites.add(bottomPipe);
 	}
 }
