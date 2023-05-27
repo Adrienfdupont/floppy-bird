@@ -97,12 +97,15 @@ public class FloppyBird extends ApplicationAdapter {
 		}
 
 		birdSprite.setY(birdSprite.getY() - gravity * Gdx.graphics.getDeltaTime());
-		for (Sprite pipe : pipeSprites) {
-			pipe.setX(pipe.getX() - 3);
+		if (birdSprite.getY() + birdSprite.getHeight() < 0) {
+			isPaused = true;
 		}
 
 		for (Sprite pipeSprite : pipeSprites) {
-			if (pipeSprite.getBoundingRectangle().overlaps(birdSprite.getBoundingRectangle())) {
+			pipeSprite.setX(pipeSprite.getX() - 3);
+			if (pipeSprite.getBoundingRectangle().overlaps(birdSprite.getBoundingRectangle())
+					|| birdSprite.getY() > camera.viewportHeight
+							&& birdSprite.getX() == pipeSprite.getX()) {
 				isPaused = true;
 			}
 		}
