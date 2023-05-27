@@ -15,33 +15,28 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
     final FloppyBird game;
+    final float pipeHeight;
+    final float pipeWidth;
+    final float maxOffset;
+    final float minOffset;
+    final int gravity = 250;
+    final int springHeight = 500;
+    float springDuration;
+
     OrthographicCamera camera;
     Texture birdTexture;
     Sprite birdSprite;
     Texture pipeUpTexture;
     Texture pipeDownTexture;
     Array<Sprite> pipeSprites;
-    final int gravity = 250;
-    final int springHeight = 500;
-    float springDuration;
-    float pipeHeight;
-    float pipeWidth;
-    float maxOffset;
-    float minOffset;
     Random random;
     Timer timer;
     TimerTask task;
-    boolean isPaused;
 
     public GameScreen(final FloppyBird game) {
-        this.game = game;
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         random = new Random();
-        isPaused = false;
-        maxOffset = -camera.viewportHeight / 3;
-        minOffset = camera.viewportHeight / 3;
         timer = new Timer();
         task = new TimerTask() {
             @Override
@@ -49,6 +44,12 @@ public class GameScreen implements Screen {
                 generatePipes();
             }
         };
+
+        this.game = game;
+        maxOffset = -camera.viewportHeight / 3;
+        minOffset = camera.viewportHeight / 3;
+        pipeHeight = camera.viewportHeight;
+        pipeWidth = (float) Math.round(pipeHeight / 6.14);
 
         birdTexture = new Texture("bird.png");
         birdSprite = new Sprite(birdTexture);
@@ -58,18 +59,13 @@ public class GameScreen implements Screen {
 
         pipeUpTexture = new Texture("pipe_up.png");
         pipeDownTexture = new Texture("pipe_down.png");
-        pipeHeight = camera.viewportHeight;
-        pipeWidth = (float) Math.round(pipeHeight / 6.14);
         pipeSprites = new Array<Sprite>();
 
-        timer.scheduleAtFixedRate(task, 0, 3000);
+        timer.scheduleAtFixedRate(task, 0, 2000);
     }
 
     @Override
     public void render(float delta) {
-        if (isPaused) {
-            return;
-        }
         // drawing
         ScreenUtils.clear(0.6f, 0.6f, 1, 1);
         camera.update();
@@ -95,7 +91,8 @@ public class GameScreen implements Screen {
 
         birdSprite.setY(birdSprite.getY() - gravity * Gdx.graphics.getDeltaTime());
         if (birdSprite.getY() + birdSprite.getHeight() < 0) {
-            isPaused = true;
+            dispose();
+            game.setScreen(new MainMenuScreen(game));
         }
 
         for (Sprite pipeSprite : pipeSprites) {
@@ -103,7 +100,8 @@ public class GameScreen implements Screen {
             if (pipeSprite.getBoundingRectangle().overlaps(birdSprite.getBoundingRectangle())
                     || birdSprite.getY() > camera.viewportHeight
                             && birdSprite.getX() == pipeSprite.getX()) {
-                isPaused = true;
+                dispose();
+                game.setScreen(new MainMenuScreen(game));
             }
         }
     }
@@ -126,11 +124,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        timer.cancel();
+        task.cancel();
         birdTexture.dispose();
         pipeDownTexture.dispose();
         pipeUpTexture.dispose();
-        timer.cancel();
-        task.cancel();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenuScreen implements Screen {
     final FloppyBird game;
+    String text;
 
     OrthographicCamera camera;
 
@@ -15,6 +16,7 @@ public class MainMenuScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
+        text = "Touchez l'écran pour jouer !";
     }
 
     @Override
@@ -24,12 +26,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0.6f, 0.6f, 1, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.font.draw(game.batch, "Touchez l'écran pour jouer !", 100, 150);
+        game.font.draw(game.batch, text, camera.viewportWidth / 2 - 100, camera.viewportHeight / 2);
+        game.font.setColor(0, 0, 0, 1);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
